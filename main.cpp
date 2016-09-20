@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-#include "Command.h"
+#include "CommandChain.h"
 
 class TestCommand : public Utils::ICommand {
 public:
@@ -33,24 +33,19 @@ int main() {
 	TrueCommand trueCmd;
 	FalseCommand falseCmd;
 
-	CommandChainBuffer<6> chainBuffer;
+	CommandChainBuffer<20> chainBuffer;
 	CommandChain chain(chainBuffer);
 
-	chain.start(testCmd)
-		.then(testCmd)
-		.then(testCmd)
-		.if_( []() -> bool { return true; } )
+	chain
+		.start(testCmd)
+		.if_([]() -> bool { return true; })
 			.then(trueCmd)
 			.then(trueCmd)
-		.else_()
-			.then(falseCmd)
-			.then(falseCmd)
-		.if_end();
+		.if_end()
+		.then(testCmd)
+	.end();
 
-	chain.debugPrint();
-
-	fflush(stdin);
-	getchar();
+	chain.exec();
 
 	return 0;
 }

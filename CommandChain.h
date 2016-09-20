@@ -26,17 +26,7 @@ namespace Utils {
 	class ChainContainer {
 	public:
 		// ------------------------------------------------------
-		// Types
-
-		typedef enum {
-			Command			= 0,
-			Condition		= 1,
-		} Type;
-
-		// ------------------------------------------------------
 		// Fields
-
-		Type		containerType;
 		size_t		indexToNext;
 
 		// For command
@@ -45,18 +35,15 @@ namespace Utils {
 		// For condition
 		bool	(*conditionCb)(void);
 		size_t	indexToNextIfFalse;
-		size_t	trueBranchSize;
-		size_t	falseBranchSize;
 
 		// ------------------------------------------------------
 		// API
 
 		ChainContainer()
-			: containerType(Command), indexToNext(0) {}
+			: indexToNext(0), cmd(nullptr), 
+			conditionCb(nullptr), indexToNextIfFalse(0) {}
 
 		virtual ~ChainContainer() {}
-
-		virtual size_t getNext() { return this->indexToNext; };
 	};
 
 	class ICommandChainBuffer {
@@ -91,12 +78,18 @@ namespace Utils {
 		CommandChain&	if_(bool(*conditionCb)());
 		CommandChain&	else_();
 		CommandChain&	if_end();
+		void			end();
 
 		void			debugPrint();
 		void			exec();
 	private:
 		ICommandChainBuffer &chainBuffer;
+		size_t			currentAddPosition;
 
-		size_t	currentAddPosition;
+		bool			useCondition;
+		bool			trueSection;
+		size_t			trueBlockSize;
+		size_t			falseBlockSize;
+		size_t			conditionIndex;
 	};
 }

@@ -1,7 +1,5 @@
 #include "CommandChain.h"
 
-#include <stdio.h>
-
 namespace Utils {
 	CommandChain::CommandChain(ICommandChainBuffer &buff) 
 		: chainBuffer(buff), currentAddPosition(0), useCondition(false), 
@@ -79,13 +77,6 @@ namespace Utils {
 					i = buffer[i].indexToNextIfFalse;
 				}
 			}
-		}
-	}
-
-	void CommandChain::debugPrint() {
-		ChainContainer* buffer = this->chainBuffer.getBuffer();
-		for (size_t i = 0; i < this->chainBuffer.getSize(); ++i) {
-			printf("[%2d] Next: %2d NextFalse: %2d\n",i, buffer[i].indexToNext, buffer[i].indexToNextIfFalse);
 		}
 	}
 }

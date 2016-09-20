@@ -80,7 +80,6 @@ namespace Utils {
 		CommandChain&	if_end();
 		void			end();
 
-		void			debugPrint();
 		void			exec();
 	private:
 		ICommandChainBuffer &chainBuffer;

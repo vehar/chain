@@ -1,13 +1,16 @@
 CC				= g++
 COMPILE_OPTS	= -std=c++1z -Wall
+INCLUDES		= -Iinc
 LIBS			= 
 OPTIMIZATION	= -O2
+SRC_DIR			= src
 OBJ_DIR			= obj
 BIN_DIR			= bin
 
 EXEC			= test.exe
-SOURCES			= CommandChain.cpp main.cpp
-OBJECTS			= $(SOURCES:%.cpp=$(OBJ_DIR)/%.o)
+SOURCES			= $(SRC_DIR)/CommandChain.cpp $(SRC_DIR)/main.cpp
+ND_SRC			= $(notdir $(SOURCES))
+OBJECTS			= $(ND_SRC:%.cpp=$(OBJ_DIR)/%.o)
 
 all: dir $(EXEC)
 
@@ -15,8 +18,8 @@ dir:
 	mkdir -p $(OBJ_DIR)
 	mkdir -p $(BIN_DIR)
 
-$(OBJ_DIR)/%.o: %.cpp
-	$(CC) $(COMPILE_OPTS) $(OPTIMIZATION) -c $< -o $@
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	$(CC) $(COMPILE_OPTS) $(OPTIMIZATION) -c $< -o $@ $(INCLUDES)
 
 $(EXEC): $(OBJECTS)
 	$(CC) $(LINK_OPTS) $(OBJECTS) -o $(BIN_DIR)/$(EXEC) $(LIBS)

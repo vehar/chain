@@ -1,9 +1,9 @@
 CC				= g++
 COMPILE_OPTS	= -std=c++1z -Wall
-INCLUDES		= -Iinc
+INCLUDES		= 
 LIBS			= 
 OPTIMIZATION	= -O2
-SRC_DIR			= src
+SRC_DIR			= .
 OBJ_DIR			= obj
 BIN_DIR			= bin
 

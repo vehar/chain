@@ -56,6 +56,11 @@ namespace Utils {
 			buffer[this->conditionIndex + this->trueBlockSize].indexToNext = 
 				this->conditionIndex + this->trueBlockSize + this->falseBlockSize + 1;
 		}
+		this->useCondition = 0;
+		this->trueSection = 0;
+		this->trueBlockSize = 0;
+		this->falseBlockSize = 0;
+		this->conditionIndex = 0;
 		return *this;
 	}
 

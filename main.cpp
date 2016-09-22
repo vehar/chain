@@ -43,6 +43,10 @@ int main() {
 			.then(trueCmd)
 		.if_end()
 		.then(testCmd)
+		.if_([]() -> bool { return true; })
+			.then(trueCmd)
+			.then(trueCmd)
+		.if_end()
 	.end();
 
 	chain.exec();

@@ -5,16 +5,7 @@
 
 #include <functional>
 
-namespace Utils {
-	// ===========================================================================
-	// Command interface
-
-	class ICommand {
-	public:
-		virtual ~ICommand() {}
-		virtual void exec() = 0;
-	};
-
+namespace utils {
 	// ===========================================================================
 	// Support types
 	class ChainContainer {
@@ -40,19 +31,19 @@ namespace Utils {
 		virtual ~ChainContainer() {}
 	};
 
-	class ICommandChainBuffer {
+	class IChainBuffer {
 	public:
-		ICommandChainBuffer() {}
-		virtual ~ICommandChainBuffer() {}
+		IChainBuffer() {}
+		virtual ~IChainBuffer() {}
 
 		virtual ChainContainer* getBuffer() = 0;
 		virtual size_t getSize() const = 0;
 	};
 
 	template<size_t size>
-	class CommandChainBuffer : public ICommandChainBuffer {
+	class ChainBuffer : public IChainBuffer {
 	public:
-		CommandChainBuffer() : ICommandChainBuffer() {}
+		ChainBuffer() : IChainBuffer() {}
 		virtual ChainContainer*	getBuffer()			{ return this->buffer; }
 		virtual size_t			getSize() const		{ return this->bufferSize; }
 	private:
@@ -63,26 +54,26 @@ namespace Utils {
 	// ===========================================================================
 	// Commands chain
 
-	class CommandChain {
+	class Chain {
 	public:
-		CommandChain(ICommandChainBuffer &buff);
+		Chain(IChainBuffer &buff);
 
-		CommandChain&	start(std::function<void()> fcn);
-		CommandChain&	then(std::function<void()> fcn);
-		CommandChain&	if_(std::function<bool()> conditionCb);
-		CommandChain&	else_();
-		CommandChain&	if_end();
-		void			end();
+		Chain&	start	(std::function<void()> fcn);
+		Chain&	then	(std::function<void()> fcn);
+		Chain&	if_ 	(std::function<bool()> conditionCb);
+		Chain&	else_ 	();
+		Chain&	if_end	();
+		void	end();
 
-		void			exec();
+		void	exec();
 	private:
-		ICommandChainBuffer &chainBuffer;
-		size_t			currentAddPosition;
+		IChainBuffer &chainBuffer;
+		size_t		currentAddPosition;
 
-		bool			useCondition;
-		bool			trueSection;
-		size_t			trueBlockSize;
-		size_t			falseBlockSize;
-		size_t			conditionIndex;
+		bool		useCondition;
+		bool		trueSection;
+		size_t		trueBlockSize;
+		size_t		falseBlockSize;
+		size_t		conditionIndex;
 	};
 }

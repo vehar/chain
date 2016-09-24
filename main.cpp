@@ -3,13 +3,11 @@
 
 #include <stdio.h>
 
-#include "CommandChain.h"
+#include "Chain.h"
 
 int main() {
-	using namespace Utils;
-
-	CommandChainBuffer<20> chainBuffer;
-	CommandChain chain(chainBuffer);
+	utils::ChainBuffer<20> chainBuffer;
+	utils::Chain chain(chainBuffer);
 
 	int32_t counter = 0;
 

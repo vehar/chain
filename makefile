@@ -8,7 +8,7 @@ OBJ_DIR			= obj
 BIN_DIR			= bin
 
 EXEC			= test.exe
-SOURCES			= $(SRC_DIR)/CommandChain.cpp $(SRC_DIR)/main.cpp
+SOURCES			= $(SRC_DIR)/Chain.cpp $(SRC_DIR)/main.cpp
 ND_SRC			= $(notdir $(SOURCES))
 OBJECTS			= $(ND_SRC:%.cpp=$(OBJ_DIR)/%.o)
 

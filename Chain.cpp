@@ -1,18 +1,18 @@
-#include "CommandChain.h"
+#include "Chain.h"
 
-namespace Utils {
-	CommandChain::CommandChain(ICommandChainBuffer &buff) 
+namespace utils {
+	Chain::Chain(IChainBuffer &buff) 
 		: chainBuffer(buff), currentAddPosition(0), useCondition(false), 
 		trueSection(false), trueBlockSize(0), falseBlockSize(0), conditionIndex(0) {
 
 	}
 
-	CommandChain& CommandChain::start(std::function<void()> fcn) {
+	Chain& Chain::start(std::function<void()> fcn) {
 		this->currentAddPosition = 0;
 		return this->then(fcn);
 	}
 
-	CommandChain& CommandChain::then(std::function<void()> fcn) {
+	Chain& Chain::then(std::function<void()> fcn) {
 		if (this->currentAddPosition < this->chainBuffer.getSize()) {
 			ChainContainer* buffer = this->chainBuffer.getBuffer();
 			buffer[this->currentAddPosition].fcn = fcn;
@@ -29,7 +29,7 @@ namespace Utils {
 		return *this;
 	}
 
-	CommandChain& CommandChain::if_(std::function<bool()> conditionCb) {
+	Chain& Chain::if_(std::function<bool()> conditionCb) {
 		if (this->currentAddPosition < this->chainBuffer.getSize()) {
 			ChainContainer* buffer = this->chainBuffer.getBuffer();
 			buffer[this->currentAddPosition].conditionCb = conditionCb;
@@ -41,14 +41,14 @@ namespace Utils {
 		return *this;
 	}
 
-	CommandChain& CommandChain::else_() {
+	Chain& Chain::else_() {
 		if (this->currentAddPosition < this->chainBuffer.getSize()) {
 			this->trueSection = false;
 		}
 		return *this;
 	}
 
-	CommandChain& CommandChain::if_end() {
+	Chain& Chain::if_end() {
 		if (this->currentAddPosition <= this->chainBuffer.getSize()) {
 			ChainContainer* buffer = this->chainBuffer.getBuffer();
 			buffer[this->conditionIndex].indexToNext = this->conditionIndex + 1;
@@ -64,11 +64,11 @@ namespace Utils {
 		return *this;
 	}
 
-	void CommandChain::end() {
+	void Chain::end() {
 		
 	}
 	
-	void CommandChain::exec() {
+	void Chain::exec() {
 		ChainContainer* buffer = this->chainBuffer.getBuffer();
 		size_t i = 0;
 		while ( i < this->currentAddPosition) {

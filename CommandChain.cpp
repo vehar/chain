@@ -7,15 +7,15 @@ namespace Utils {
 
 	}
 
-	CommandChain& CommandChain::start(ICommand& cmd) {
+	CommandChain& CommandChain::start(std::function<void()> fcn) {
 		this->currentAddPosition = 0;
-		return this->then(cmd);
+		return this->then(fcn);
 	}
 
-	CommandChain& CommandChain::then(ICommand& cmd) {
+	CommandChain& CommandChain::then(std::function<void()> fcn) {
 		if (this->currentAddPosition < this->chainBuffer.getSize()) {
 			ChainContainer* buffer = this->chainBuffer.getBuffer();
-			buffer[this->currentAddPosition].cmd = &cmd;
+			buffer[this->currentAddPosition].fcn = fcn;
 			buffer[this->currentAddPosition].indexToNext = this->currentAddPosition + 1;
 			if (this->useCondition) {
 				if (this->trueSection) {
@@ -29,7 +29,7 @@ namespace Utils {
 		return *this;
 	}
 
-	CommandChain& CommandChain::if_(bool(*conditionCb)()) {
+	CommandChain& CommandChain::if_(std::function<bool()> conditionCb) {
 		if (this->currentAddPosition < this->chainBuffer.getSize()) {
 			ChainContainer* buffer = this->chainBuffer.getBuffer();
 			buffer[this->currentAddPosition].conditionCb = conditionCb;
@@ -72,10 +72,10 @@ namespace Utils {
 		ChainContainer* buffer = this->chainBuffer.getBuffer();
 		size_t i = 0;
 		while ( i < this->currentAddPosition) {
-			if (buffer[i].cmd) {
-				buffer[i].cmd->exec();
+			if (buffer[i].fcn != nullptr) {
+				buffer[i].fcn();
 				i = buffer[i].indexToNext;
-			} else if (buffer[i].conditionCb) {
+			} else if (buffer[i].conditionCb != nullptr) {
 				if (buffer[i].conditionCb()) {
 					i = buffer[i].indexToNext;
 				} else {

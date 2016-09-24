@@ -1,5 +1,5 @@
 CC				= g++
-COMPILE_OPTS	= -std=c++1z -Wall
+COMPILE_OPTS	= -std=gnu++1z -Wall
 INCLUDES		= 
 LIBS			= 
 OPTIMIZATION	= -O2

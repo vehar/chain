@@ -5,47 +5,24 @@
 
 #include "CommandChain.h"
 
-class TestCommand : public Utils::ICommand {
-public:
-	TestCommand() : ICommand() {}
-
-	virtual void exec() override { printf("Test command\n"); }
-};
-
-class TrueCommand : public Utils::ICommand {
-public:
-	TrueCommand() : ICommand() {}
-
-	virtual void exec() override { printf("TRUE command\n"); }
-};
-
-class FalseCommand : public Utils::ICommand {
-public:
-	FalseCommand() : ICommand() {}
-
-	virtual void exec() override { printf("FALSE command\n"); }
-};
-
 int main() {
 	using namespace Utils;
-
-	TestCommand testCmd;
-	TrueCommand trueCmd;
-	FalseCommand falseCmd;
 
 	CommandChainBuffer<20> chainBuffer;
 	CommandChain chain(chainBuffer);
 
+	int32_t counter = 0;
+
 	chain
-		.start(testCmd)
-		.if_([]() -> bool { return true; })
-			.then(trueCmd)
-			.then(trueCmd)
+		.start([&counter]() { printf("Start command [%d]\n", counter); counter++; })
+		.if_([&counter]() -> bool { return true; })
+			.then([&counter]() { printf("If command, true block [%d]\n", counter); counter++; })
+			.then([&counter]() { printf("If command, true block [%d]\n", counter); counter++; })
 		.if_end()
-		.then(testCmd)
-		.if_([]() -> bool { return true; })
-			.then(trueCmd)
-			.then(trueCmd)
+		.then([&counter]() { printf("Then command [%d]\n", counter); counter++; })
+		.if_([&counter]() -> bool { return true; })
+			.then([&counter]() { printf("If command, true block [%d]\n", counter); counter++; })
+			.then([&counter]() { printf("If command, true block [%d]\n", counter); counter++; })
 		.if_end()
 	.end();
 

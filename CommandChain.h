@@ -3,13 +3,7 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#ifndef nullptr
-#define nullptr NULL
-#endif
-
-#ifndef override
-#define override
-#endif
+#include <functional>
 
 namespace Utils {
 	// ===========================================================================
@@ -29,18 +23,18 @@ namespace Utils {
 		// Fields
 		size_t		indexToNext;
 
-		// For command
-		ICommand *cmd;
+		// Chain function
+		std::function<void()> fcn;
 
 		// For condition
-		bool	(*conditionCb)(void);
+		std::function<bool()> conditionCb;
 		size_t	indexToNextIfFalse;
 
 		// ------------------------------------------------------
 		// API
 
 		ChainContainer()
-			: indexToNext(0), cmd(nullptr), 
+			: indexToNext(0), fcn(nullptr), 
 			conditionCb(nullptr), indexToNextIfFalse(0) {}
 
 		virtual ~ChainContainer() {}
@@ -73,9 +67,9 @@ namespace Utils {
 	public:
 		CommandChain(ICommandChainBuffer &buff);
 
-		CommandChain&	start(ICommand& cmd);
-		CommandChain&	then(ICommand& cmd);
-		CommandChain&	if_(bool(*conditionCb)());
+		CommandChain&	start(std::function<void()> fcn);
+		CommandChain&	then(std::function<void()> fcn);
+		CommandChain&	if_(std::function<bool()> conditionCb);
 		CommandChain&	else_();
 		CommandChain&	if_end();
 		void			end();

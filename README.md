@@ -1,16 +1,16 @@
-# CommandChain
+# Chain
 
 ## Сборка примера
 Для запуска примера выполнить `make all`. Если Windows, приложить к exe `libgcc_s_dw2-1.dll` и `libstdc++-6.dll`.
 
 ## Пример использования
-Все, что необходимо - приложить к проекту два файла - CommandChain.h и CommandChain.cpp. Для использования CommandChain предварительно нужно создать буфер на необходимое число команд, при этом if входит в число команд, а if_end и end нет. 
+Все, что необходимо - приложить к проекту два файла - Chain.h и Chain.cpp. Для использования CommandChain предварительно нужно создать буфер на необходимое число команд, при этом if входит в число команд, а if_end и end нет. 
 ```C++
-Utils::CommandChainBuffer<20> chainBuffer;
+utils::ChainBuffer<20> chainBuffer;
 ```
 Затем можно создлавать сам объект цепочки и через чейнинг задавать последовательность неких команд:
 ```C++
-Utils::CommandChain chain(chainBuffer);
+utils::Chain chain(chainBuffer);
 
 int32_t counter = 0;
 
